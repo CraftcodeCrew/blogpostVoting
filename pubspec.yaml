@@ -3,6 +3,7 @@ description: A simple Hello World Flutter app to vote Blogpost
 
 dependencies:
   rxdart: ^0.16.0+2
+  cloud_firestore: ^0.7.3
   flutter:
     sdk: flutter
 

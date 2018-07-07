@@ -4,7 +4,7 @@ import 'package:blogpostvoting/Author.dart';
 import 'package:rxdart/subjects.dart';
 
 class Vote {
-  final Author votedAuthor;
+  final String votedAuthor;
 
   Vote(this.votedAuthor);
 }
@@ -17,10 +17,15 @@ class AuthorBloc {
   final BehaviorSubject<bool> _voted =
     BehaviorSubject<bool>(seedValue: false);
 
-  AuthorBloc() {}
+  AuthorBloc() {
+
+    _authorController.stream.listen((data) => print(data.votedAuthor));
+    
+  }
 
 
   Sink<Vote> get authorVote => _authorController.sink;
+  
 
   void dispose(){
     _authorController.close();

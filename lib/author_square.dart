@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class AuthorSquare extends StatelessWidget {
-  final Author author;
+  final String author;
 
  final GestureTapCallback onTab;
 
@@ -20,7 +20,7 @@ class AuthorSquare extends StatelessWidget {
         onTap: onTab,
         child: new Center(
             child: new Text(
-              author.name
+              author
             )),
       ),
 
