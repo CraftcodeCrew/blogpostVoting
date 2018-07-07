@@ -1,7 +1,6 @@
 import 'package:blogpostvoting/AuthorBloc.dart';
 import 'package:blogpostvoting/AuthorProvider.dart';
 import 'package:blogpostvoting/author_square.dart';
-import 'package:blogpostvoting/cracke_hoe.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,6 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthorProvider(
       child: MaterialApp(
+        routes: <String, WidgetBuilder> {
+          '/vote' : (BuildContext context) => MyHomePage(),
+          '/result' : (BuildContext context) => SecoundScreen()
+        },
         title: 'Bloc',
           home: MyHomePage(),
       ),
@@ -23,7 +26,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final authorbloc = AuthorProvider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Bloc"),
@@ -33,15 +35,14 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-
 class AuthorGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authorBloc = AuthorProvider.of(context);
     return new StreamBuilder(
-      stream: Firestore.instance.collection("AuthorVotes").snapshots(),
+      stream: authorBloc.firebaseStream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
+        if (snapshot != null && !snapshot.hasData) return const Text('Loading...');
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) => 
@@ -55,9 +56,42 @@ class AuthorGrid extends StatelessWidget {
             return new AuthorSquare(
               author: document['Author'],
               onTab: (){
-                authorBloc.authorVote.add(Vote(document['Author']));
+                authorBloc.authorVote.add(Vote(document));
+                Navigator.of(context).pushNamed('/result');
               },
             );
   }
-
 }
+
+
+class SecoundScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final authorBloc = AuthorProvider.of(context);
+    return new Scaffold(
+      appBar: new AppBar(
+      title: new Text("Result"),
+    ),
+    body: new StreamBuilder(
+      stream: authorBloc.firebaseStream,
+      builder: (context, snapshot) {
+        if (snapshot != null && !snapshot.hasData) return const Text('Loading...');
+        return new ListView.builder(
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) => 
+            _buildItem(context, snapshot.data.documents[index]), 
+        );
+      },
+    ),
+    );
+  }
+
+   Widget _buildItem(BuildContext context, DocumentSnapshot document) {
+            return new ListTile(
+              onTap: null,
+              leading: new Text(document['Votes'].toString()),
+              title: new Text(document['Author']),
+            );
+  }
+}
+
