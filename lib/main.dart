@@ -12,10 +12,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthorProvider(
       child: MaterialApp(
-        routes: <String, WidgetBuilder> {
-          '/vote' : (BuildContext context) => MyHomePage(),
-          '/result' : (BuildContext context) => SecoundScreen()
-        },
         title: 'Bloc',
           home: MyHomePage(),
       ),
@@ -57,9 +53,13 @@ class AuthorGrid extends StatelessWidget {
               author: document['Author'],
               onTab: (){
                 authorBloc.authorVote.add(Vote(document));
-                Navigator.of(context).pushNamed('/result');
+                Navigator.pushReplacement(
+                  context,
+                  new MaterialPageRoute(
+                    builder : (BuildContext context) => new SecoundScreen()));
               },
             );
+            
   }
 }
 
