@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:async/async.dart';
 import 'package:blogpostvoting/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

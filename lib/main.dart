@@ -53,12 +53,12 @@ class AuthorGrid extends StatelessWidget {
   Widget _buildGridItem(BuildContext context, DocumentSnapshot document, AuthorBloc authorBloc) {
             return new AuthorSquare(
               author: document['Author'],
+              imageUrl: document['Image'],
               onTab: (){
                 authorBloc.authorVote.add(Vote(document));
                 authorBloc.wigetSink.add(new SecoundScreen());
               },
             );
-            
   }
 }
 
