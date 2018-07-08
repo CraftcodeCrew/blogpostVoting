@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authorBloc = AuthorProvider.of(context);
+    authorBloc.contextSink.add(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Bloc"),
@@ -53,10 +55,7 @@ class AuthorGrid extends StatelessWidget {
               author: document['Author'],
               onTab: (){
                 authorBloc.authorVote.add(Vote(document));
-                Navigator.pushReplacement(
-                  context,
-                  new MaterialPageRoute(
-                    builder : (BuildContext context) => new SecoundScreen()));
+                authorBloc.wigetSink.add(new SecoundScreen());
               },
             );
             
@@ -68,6 +67,7 @@ class SecoundScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authorBloc = AuthorProvider.of(context);
+    authorBloc.contextSink.add(context);
     return new Scaffold(
       appBar: new AppBar(
       title: new Text("Result"),
@@ -81,6 +81,13 @@ class SecoundScreen extends StatelessWidget {
           itemBuilder: (context, index) => 
             _buildItem(context, snapshot.data.documents[index]), 
         );
+      },
+    ),
+    floatingActionButton: new FloatingActionButton(
+      tooltip: 'clear',
+      child: new Icon(Icons.clear),
+      onPressed: () {
+        authorBloc.fabSink.add(true);
       },
     ),
     );
